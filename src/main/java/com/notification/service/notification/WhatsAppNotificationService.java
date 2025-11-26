@@ -32,7 +32,7 @@ public class WhatsAppNotificationService {
     private String authToken;
 
     @Value("${twilio.phone-number}")
-    private String fromNumber; // e.g., "whatsapp:+14155238886"
+    private String fromNumber;
 
     @Value("${notification.retry.max-attempts}")
     private int maxRetries;
@@ -42,7 +42,7 @@ public class WhatsAppNotificationService {
 
     @PostConstruct
     public void init() {
-        // Initialize Twilio SDK once at startup
+
         Twilio.init(accountSid, authToken);
         log.info("Twilio SDK initialized with Account SID: {}", accountSid);
     }

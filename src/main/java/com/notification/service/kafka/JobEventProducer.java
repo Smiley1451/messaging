@@ -28,8 +28,8 @@ public class JobEventProducer {
                             topic,
                             null,
                             System.currentTimeMillis(),
-                            event.getRequesterWhatsapp(), // Key
-                            jsonPayload, // Value (JSON String)
+                            event.getRequesterWhatsapp(),
+                            jsonPayload,
                             null
                     );
                     return kafkaSender.send(Mono.just(record)).next();

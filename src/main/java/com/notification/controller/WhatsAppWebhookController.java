@@ -24,8 +24,8 @@ public class WhatsAppWebhookController {
     public Mono<String> handleIncomingMessage(ServerWebExchange exchange) {
         return exchange.getFormData()
                 .flatMap(formData -> {
-                    String from = formData.getFirst("From"); // e.g., whatsapp:+919999999999
-                    String body = formData.getFirst("Body"); // The message content
+                    String from = formData.getFirst("From");
+                    String body = formData.getFirst("Body");
 
                     log.info("Received WhatsApp message from {}: {}", from, body);
 
@@ -34,6 +34,6 @@ public class WhatsAppWebhookController {
                     }
                     return Mono.empty();
                 })
-                .thenReturn("<Response></Response>"); // Return TwiML to acknowledge receipt
+                .thenReturn("<Response></Response>");
     }
 }

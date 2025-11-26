@@ -42,7 +42,7 @@ public class NotificationLog {
     private Json metadata;
 
     @Column("status")
-    private String status; // SUCCESS, FAILED, RETRY
+    private String status;
 
     @Column("retry_count")
     private Integer retryCount;
