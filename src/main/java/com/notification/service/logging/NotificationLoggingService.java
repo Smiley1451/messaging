@@ -60,10 +60,22 @@ public class NotificationLoggingService {
     }
 
     private String getDestinationString(NotificationEvent event) {
+        if (event == null || event.getSource() == null) {
+            return null;
+        }
+
+        var dest = event.getDestination();
+        if (dest == null) {
+            return null;
+        }
+
         return switch (event.getSource()) {
-            case WHATSAPP -> event.getDestination().getWhatsappNumber();
-            case EMAIL -> event.getDestination().getEmail();
-            case REALTIME -> event.getDestination().getUserId();
+            case WHATSAPP -> dest.getWhatsappNumber();
+            case EMAIL -> dest.getEmail();
+            case REALTIME -> dest.getUserId();
+            case ALL -> String.format("Multi-Channel: [WhatsApp: %s, Email: %s, UserID: %s]",
+                    dest.getWhatsappNumber(), dest.getEmail(), dest.getUserId());
+            default -> null;
         };
     }
 }

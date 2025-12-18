@@ -22,7 +22,7 @@ public class NotificationRouterService {
 
     public Mono<Void> routeNotification(NotificationEvent event) {
         Objects.requireNonNull(event, "event must not be null");
-        log.info("Routing notification for user: {} via {}", event.getUsername(), event.getSource());
+        log.info("Routing notification | Name: {} | UserID: {} | via: {}", event.getUserName(), event.getUsername(), event.getSource());
 
         return switch (event.getSource()) {
             case WHATSAPP -> whatsAppService.sendNotification(event);
