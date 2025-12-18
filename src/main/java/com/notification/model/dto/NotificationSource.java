@@ -6,7 +6,8 @@ import com.fasterxml.jackson.annotation.JsonValue;
 public enum NotificationSource {
     WHATSAPP("WHATSAPP"),
     EMAIL("EMAIL"),
-    REALTIME("REALTIME");
+    REALTIME("REALTIME"),
+    ALL("ALL");
 
     private final String value;
 
