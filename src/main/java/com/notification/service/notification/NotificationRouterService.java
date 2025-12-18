@@ -9,6 +9,7 @@ import reactor.core.publisher.Mono;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 @Service
@@ -22,7 +23,14 @@ public class NotificationRouterService {
 
     public Mono<Void> routeNotification(NotificationEvent event) {
         Objects.requireNonNull(event, "event must not be null");
-        log.info("Routing notification | Name: {} | UserID: {} | via: {}", event.getUserName(), event.getUsername(), event.getSource());
+
+        Map<String, Object> meta = event.getMetadata() != null ? event.getMetadata() : Map.of();
+        String providerName = Objects.toString(meta.get("providerName"), "");
+        String providerPhone = Objects.toString(meta.get("providerPhone"), "");
+        String providerEmail = Objects.toString(meta.get("providerEmail"), "");
+
+        log.info("Routing notification | Name: {} | UserID: {} | via: {} | provider: {}/{}/{}",
+                event.getUserName(), event.getUsername(), event.getSource(), providerName, providerPhone, providerEmail);
 
         return switch (event.getSource()) {
             case WHATSAPP -> whatsAppService.sendNotification(event);

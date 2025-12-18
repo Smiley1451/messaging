@@ -10,6 +10,7 @@ import org.springframework.web.reactive.socket.WebSocketMessage;
 import org.springframework.web.reactive.socket.WebSocketSession;
 import reactor.core.publisher.Mono;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -51,12 +52,21 @@ public class WebSocketNotificationHandler implements WebSocketHandler {
         }
 
         try {
-            String jsonMessage = objectMapper.writeValueAsString(Map.of(
-                    "subject", event.getSubject(),
-                    "message", event.getMessage(),
-                    "metadata", event.getMetadata(),
-                    "timestamp", System.currentTimeMillis()
-            ));
+            Map<String, Object> payload = new HashMap<>();
+            payload.put("subject", event.getSubject());
+            payload.put("message", event.getMessage());
+            payload.put("username", event.getUsername());
+            payload.put("userName", event.getUserName());
+            payload.put("destination", event.getDestination());
+            payload.put("metadata", event.getMetadata());
+            // explicit provider fields for convenience
+            Map<String, Object> meta = event.getMetadata() != null ? event.getMetadata() : Map.of();
+            payload.put("providerName", meta.getOrDefault("providerName", ""));
+            payload.put("providerPhone", meta.getOrDefault("providerPhone", ""));
+            payload.put("providerEmail", meta.getOrDefault("providerEmail", ""));
+            payload.put("timestamp", System.currentTimeMillis());
+
+            String jsonMessage = objectMapper.writeValueAsString(payload);
 
             return session.send(Mono.just(session.textMessage(jsonMessage)))
                     .thenReturn(true)
